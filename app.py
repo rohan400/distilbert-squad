@@ -14,7 +14,7 @@ def index():
         context = request.args["context"]
         question = request.args["question"]
 
-        answer = rs.predict(context, answer)
+        answer = rs.predict(context, question)
         print(answer)
 
         return flask.render_template('index.html', question=question, answer=answer)
