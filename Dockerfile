@@ -12,7 +12,8 @@ COPY . ./
 # Copying this separately prevents re-running pip install on every code change.
 
 COPY requirements.txt .
-
+RUN pip uninstall -y tensorflow
+RUN pip install tensorflow==1.14
 RUN pip install -r requirements.txt
 
 RUN python test.py
