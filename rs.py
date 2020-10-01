@@ -872,19 +872,14 @@ def download_model(s3_url, model_name):
 
 
 def load_model():
-    print('************************************************')
     s3_model_url = 'https://storage.googleapis.com/bertpepper/multi_cased_L-12_H-768_A-12/bert_model.ckpt.data-00000-of-00001'
-    print('************************************************')
     path_to_model1 = download_model(s3_model_url, model_name="bert_model.ckpt.data-00000-of-00001")
-    print('************************************************')
     path_to_model = 'model/bert_model.ckpt'
 
     return path_to_model
 
 def predict(context, question):
-    print('************************************************')
     path_to_model=load_model()
-    print('************************************************')
     tf.logging.set_verbosity(tf.logging.INFO)
 
     bert_config = modeling.BertConfig.from_json_file('model/config.json')
