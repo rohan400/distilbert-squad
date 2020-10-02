@@ -20,6 +20,7 @@ def index():
 
         context = request.args["context"]
         question = request.args["question"]
+        rs.load_model()
         answer = rs.predict(context, question)
         time.sleep(10)
 
