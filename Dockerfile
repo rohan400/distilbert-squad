@@ -10,7 +10,7 @@ COPY . ./
 # Install production dependencies.
 # Copy application dependency manifests to the container image.
 # Copying this separately prevents re-running pip install on every code change.
-RUN apt-get update && apt-get install -y supervisor
+#RUN apt-get update && apt-get install -y supervisor
 COPY requirements.txt .
 RUN pip uninstall -y tensorflow
 RUN pip install tensorflow==1.14
@@ -25,8 +25,8 @@ RUN python test.py
 
 EXPOSE 8080
 # needs to be set else Celery gives an error (because docker runs commands inside container as root)
-ENV C_FORCE_ROOT=1
+#ENV C_FORCE_ROOT=1
 
 # run supervisord
-CMD ["supervisord"]
+#CMD ["supervisord"]
 CMD ["gunicorn", "--bind", "0.0.0.0:8080",  "--workers", "1", "--threads", "8", "app:app", "--timeout", "900"]
