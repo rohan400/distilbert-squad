@@ -15,10 +15,11 @@ def index():
 
         context = request.args["context"]
         question = request.args["question"]
-        time.sleep(10)
-        print(question)
+
+
         answer = rs.predict(context, question)
-        print(answer)
+        time.sleep(10)
+
 
         return flask.render_template('index.html', question=question, answer=answer)
     else:
