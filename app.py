@@ -15,8 +15,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def run_jobs():
-    executor.submit(someHeavyFunction)
-    return 'One job were launched in background!'
+    future=executor.submit(someHeavyFunction)
+    return_value = future.result()
+    return return_value
 
 
 
