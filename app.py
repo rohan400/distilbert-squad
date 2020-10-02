@@ -10,9 +10,9 @@ app = flask.Flask(__name__)
 answer = rs.predict(context, question)
 print(answer)
 
-@app.route('/')
+'''@app.route('/')
 
-'''def index():
+def index():
 
     if request.args:
 
