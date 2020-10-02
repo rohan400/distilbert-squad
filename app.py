@@ -7,8 +7,12 @@ from threading import Thread
 
 
 app = flask.Flask(__name__)
-answer = rs.predict(context, question)
-print(answer)
+
+
+@app.route('/')
+def hello():
+    answer = rs.predict(context, question)
+    return 'Hello World'
 
 '''@app.route('/')
 
