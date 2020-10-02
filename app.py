@@ -15,8 +15,7 @@ def index():
 
         context = request.args["context"]
         question = request.args["question"]
-
-
+        time.sleep(10)
         answer = rs.predict(context, question)
         time.sleep(10)
 
