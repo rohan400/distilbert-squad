@@ -2,6 +2,7 @@ from flask import request
 import rs
 import flask
 import os
+import time
 
 
 app = flask.Flask(__name__)
@@ -14,7 +15,7 @@ def index():
 
         context = request.args["context"]
         question = request.args["question"]
-       
+        time.sleep(10)
         print(question)
         answer = rs.predict(context, question)
         print(answer)
