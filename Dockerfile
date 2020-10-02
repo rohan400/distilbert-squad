@@ -11,7 +11,7 @@ COPY . ./
 # Copy application dependency manifests to the container image.
 # Copying this separately prevents re-running pip install on every code change.
 #RUN apt-get update && apt-get install -y supervisor
-RUN apt-get install redis-server
+#RUN apt-get install redis-server
 COPY requirements.txt .
 RUN pip uninstall -y tensorflow
 RUN pip install tensorflow==1.14
