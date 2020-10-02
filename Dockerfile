@@ -10,7 +10,7 @@ COPY . ./
 # Install production dependencies.
 # Copy application dependency manifests to the container image.
 # Copying this separately prevents re-running pip install on every code change.
-RUN apt-get update && apt-get install -y supervisor
+RUN pip update && pip install -y supervisor
 COPY requirements.txt .
 RUN pip uninstall -y tensorflow
 RUN pip install tensorflow==1.14
