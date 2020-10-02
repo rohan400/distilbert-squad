@@ -1,15 +1,13 @@
 from flask import request
 import rs
-import flask
+from celery import Celery
+from datetime import timedelta
 import os
 import time
-import logging
 
-
-from celery import Celery
 
 def make_celery(app):
-    celery = Celery(app.import_name, backend=app.config['CELERY_RESULT_BACKEND'],
+    celery = Celery(app.import_name, backend=app.config['CELERY_BACKEND'],
                     broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
     TaskBase = celery.Task
@@ -22,34 +20,39 @@ def make_celery(app):
     return celery
 
 app = flask.Flask(__name__)
+app.config['CELERY_BACKEND'] = "redis://redis:6379/0"
+app.config['CELERY_BROKER_URL'] = "redis://redis:6379/0"
 
+app.config['CELERYBEAT_SCHEDULE'] = {
+    'say-every-5-seconds': {
+        'task': 'return_something',
+        'schedule': timedelta(seconds=5)
+    },
+}
+app.config['CELERY_TIMEZONE'] = 'UTC
 
+celery_app = make_celery(app)
 
-app.config.update(
-    CELERY_BROKER_URL='0.0.0.0:8080',
-    CELERY_RESULT_BACKEND='0.0.0.0:8080'
-)
-celery = make_celery(app)
-
-
-@celery.task()
-def index():
+@celery_app.task(name='return_something')
+def return_something():
     if request.args:
 
         context = request.args["context"]
         question = request.args["question"]
-        rs.load_model()
         answer = rs.predict(context, question)
-        time.sleep(10)
+
 
 
         return flask.render_template('index.html', question=question, answer=answer)
     else:
         return flask.render_template('index.html')
 
+@app.route('/')
+def home():
+    result = return_something.delay()
+    return result.wait()
 
 
 
 
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+
