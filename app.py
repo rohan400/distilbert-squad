@@ -9,7 +9,9 @@ from flask_cors import cross_origin
 
 
 app = flask.Flask(__name__)
-
+@app.route('/')
+def hello():
+    return 'Hello World'
 
 '''@app.route('/')
 def index():
@@ -40,7 +42,7 @@ def webhook():
 
     res = processRequest(req)
 
-    res = json.dumps(res, indent=4)
+    res = json.dumps(res, indent=2)
     #print(res)
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
