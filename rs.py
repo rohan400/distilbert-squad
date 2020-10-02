@@ -870,16 +870,24 @@ def download_model(s3_url, model_name):
 
     return path_to_model
 
-
 def load_model():
+
     s3_model_url = 'https://storage.googleapis.com/bertpepper/multi_cased_L-12_H-768_A-12/bert_model.ckpt.data-00000-of-00001'
+
     path_to_model1 = download_model(s3_model_url, model_name="bert_model.ckpt.data-00000-of-00001")
+
     path_to_model = 'model/bert_model.ckpt'
+
+
+    
 
     return path_to_model
 
+
 def predict(context, question):
+
     path_to_model=load_model()
+
     tf.logging.set_verbosity(tf.logging.INFO)
 
     bert_config = modeling.BertConfig.from_json_file('model/config.json')
@@ -980,14 +988,11 @@ def predict(context, question):
               unique_id=unique_id,
               start_logits=start_logits,
               end_logits=end_logits))
-    output_prediction_file = os.path.join(FLAGS.output_dir, "predictions.json")
-    output_nbest_file = os.path.join(FLAGS.output_dir, "nbest_predictions.json")
-    output_null_log_odds_file = os.path.join(FLAGS.output_dir, "null_odds.json")
+
 
     answerQA = write_predictions(eval_examples, eval_features, all_results,
                       FLAGS.n_best_size, FLAGS.max_answer_length,
-                      FLAGS.do_lower_case, output_prediction_file,
-                      output_nbest_file, output_null_log_odds_file)
+                      FLAGS.do_lower_case)
 
        
 
@@ -996,11 +1001,8 @@ def predict(context, question):
   
 
 def write_predictions(all_examples, all_features, all_results, n_best_size,
-                      max_answer_length, do_lower_case, output_prediction_file,
-                      output_nbest_file, output_null_log_odds_file):
-  """Write final predictions to the json file and log-odds of null if needed."""
-  tf.logging.info("Writing predictions to: %s" % (output_prediction_file))
-  tf.logging.info("Writing nbest to: %s" % (output_nbest_file))
+                      max_answer_length, do_lower_case):
+
 
   example_index_to_features = collections.defaultdict(list)
   for feature in all_features:
@@ -1032,13 +1034,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
       start_indexes = _get_best_indexes(result.start_logits, n_best_size)
       end_indexes = _get_best_indexes(result.end_logits, n_best_size)
       # if we could have irrelevant answers, get the min score of irrelevant
-      if FLAGS.version_2_with_negative:
-        feature_null_score = result.start_logits[0] + result.end_logits[0]
-        if feature_null_score < score_null:
-          score_null = feature_null_score
-          min_null_feature_index = feature_index
-          null_start_logit = result.start_logits[0]
-          null_end_logit = result.end_logits[0]
+
       for start_index in start_indexes:
         for end_index in end_indexes:
           # We could hypothetically create invalid predictions, e.g., predict
@@ -1067,14 +1063,7 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
                   start_logit=result.start_logits[start_index],
                   end_logit=result.end_logits[end_index]))
 
-    if FLAGS.version_2_with_negative:
-      prelim_predictions.append(
-          _PrelimPrediction(
-              feature_index=min_null_feature_index,
-              start_index=0,
-              end_index=0,
-              start_logit=null_start_logit,
-              end_logit=null_end_logit))
+
     prelim_predictions = sorted(
         prelim_predictions,
         key=lambda x: (x.start_logit + x.end_logit),
@@ -1120,13 +1109,6 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
               start_logit=pred.start_logit,
               end_logit=pred.end_logit))
 
-    # if we didn't inlude the empty option in the n-best, inlcude it
-    if FLAGS.version_2_with_negative:
-      if "" not in seen_predictions:
-        nbest.append(
-            _NbestPrediction(
-                text="", start_logit=null_start_logit,
-                end_logit=null_end_logit))
     # In very rare edge cases we could have no valid predictions. So we
     # just create a nonce prediction in this case to avoid failure.
     if not nbest:
@@ -1145,40 +1127,17 @@ def write_predictions(all_examples, all_features, all_results, n_best_size,
 
     probs = _compute_softmax(total_scores)
 
-    nbest_json = []
     for (i, entry) in enumerate(nbest):
       output = collections.OrderedDict()
       output["text"] = nbest[0].text
       output["probability"] = probs[0]
       output["start_logit"] = nbest[0].start_logit
       output["end_logit"] = nbest[0].end_logit
-      nbest_json.append(output)
 
-    assert len(nbest_json) >= 1
 
-    if not FLAGS.version_2_with_negative:
-      all_predictions[example.qas_id] = nbest_json[0]["text"]
-    else:
-      # predict "" iff the null score - the score of best non-null > threshold
-      score_diff = score_null - best_non_null_entry.start_logit - (
-          best_non_null_entry.end_logit)
-      scores_diff_json[example.qas_id] = score_diff
-      if score_diff > FLAGS.null_score_diff_threshold:
-        all_predictions[example.qas_id] = ""
-      else:
-        all_predictions[example.qas_id] = best_non_null_entry.text
 
-    all_nbest_json[example.qas_id] = nbest_json
 
-  with tf.gfile.GFile(output_prediction_file, "w") as writer:
-    writer.write(json.dumps(all_predictions, indent=4) + "\n")
 
-  with tf.gfile.GFile(output_nbest_file, "w") as writer:
-    writer.write(json.dumps(all_nbest_json, indent=4) + "\n")
-
-  if FLAGS.version_2_with_negative:
-    with tf.gfile.GFile(output_null_log_odds_file, "w") as writer:
-      writer.write(json.dumps(scores_diff_json, indent=4) + "\n")
 
   return output
 
