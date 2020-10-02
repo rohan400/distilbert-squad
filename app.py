@@ -22,10 +22,10 @@ class threadClass:
 app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
-    try:
-        begin = threadClass()
-    except:
-        abort(500)
+try:
+    begin = threadClass()
+except:
+    abort(500)
 
     return "Task is in progress"
 
