@@ -64,7 +64,8 @@ def processRequest(req):
     
     if (intent=='QA - yes'):
         prediction = rs.predict(context, question)
-       
+	
+
         fulfillmentText= "The Iris type seems to be..  {} !".format(prediction)
         #log.write_log(sessionID, "Bot Says: "+fulfillmentText)
         return {
