@@ -12,7 +12,7 @@ log.setLevel(logging.ERROR)
 
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 
 def index():
 
