@@ -4,6 +4,7 @@ from celery import Celery
 from datetime import timedelta
 import os
 import time
+import flask
 
 
 def make_celery(app):
@@ -26,7 +27,7 @@ app.config['CELERY_BROKER_URL'] = "redis://redis:6379/0"
 app.config['CELERYBEAT_SCHEDULE'] = {
     'say-every-5-seconds': {
         'task': 'return_something',
-        'schedule': timedelta(seconds=5)
+        'schedule': timedelta(seconds=10)
     },
 }
 app.config['CELERY_TIMEZONE'] = 'UTC
