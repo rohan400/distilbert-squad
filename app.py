@@ -39,7 +39,7 @@ celery.conf.update(app.config)
 
 @app.route('/')
 def run_jobs():
-    task = my_background_task.apply_async(countdown=60)
+    task = my_background_task.delay()
     return task
 
 @celery.task
