@@ -19,6 +19,7 @@ RUN pip install -r requirements.txt
 RUN apt-get update
 RUN apt-get -y install redis-server
 #RUN service redis-server start
+RUN apt-get install -y supervisor
 RUN python test.py
 
 # Run the web service on container startup. Here we use the gunicorn
@@ -31,5 +32,5 @@ EXPOSE 8080
 #ENV C_FORCE_ROOT=1
 
 # run supervisord
-CMD start.sh
+
 CMD ["gunicorn", "--bind", "0.0.0.0:8080",  "--workers", "1", "--threads", "8", "app:app", "--timeout", "900"]
