@@ -17,7 +17,7 @@ RUN pip uninstall -y tensorflow
 RUN pip install tensorflow==1.14
 RUN pip install -r requirements.txt
 RUN apt-get update
-RUN apt-get -y install redis-server==2.8
+RUN apt-get install redis-server=2:2.8.12-1chl1~precise1
 RUN redis-server --daemonize yes
 RUN python test.py
 
