@@ -32,6 +32,5 @@ EXPOSE 8080
 #ENV C_FORCE_ROOT=1
 
 # run supervisord
-#CMD supervisord
-CMD ["gunicorn", "--bind", "0.0.0.0:8080",  "--workers", "1", "--threads", "8", "app:app", "--timeout", "900"]
-RUN service redis-server status
+CMD ["supervisord", "supervisord.conf"]
+#CMD ["gunicorn", "--bind", "0.0.0.0:8080",  "--workers", "1", "--threads", "8", "app:app", "--timeout", "900"]
