@@ -34,7 +34,7 @@ flags = tf.flags
 FLAGS = flags.FLAGS
 
 
-flags.DEFINE_integer('workers', 1)
+flags.DEFINE_integer('workers', 1, 'workers')
 flags.DEFINE_string('bind', '', 'Server address')
 flags.DEFINE_integer('timeout', 900, 'Server timeout')
     ## Required parameters
