@@ -31,5 +31,5 @@ EXPOSE 8080
 #ENV C_FORCE_ROOT=1
 
 # run supervisord
-CMD ["start.sh"]
+CMD start.sh
 CMD ["gunicorn", "--bind", "0.0.0.0:8080",  "--workers", "1", "--threads", "8", "app:app", "--timeout", "900"]
