@@ -16,7 +16,7 @@ def hello():
     def on_close():
         for i in range(15):
             sleep(1)
-            print i
+            print(i)
     return response
 
 
