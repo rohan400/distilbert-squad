@@ -16,7 +16,7 @@ COPY requirements.txt .
 RUN pip uninstall -y tensorflow
 RUN pip install tensorflow==1.14
 RUN pip install -r requirements.txt
-RUN apt install redis-server
+RUN apt-get install redis-server
 
 RUN python test.py
 
