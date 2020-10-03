@@ -17,8 +17,8 @@ RUN pip uninstall -y tensorflow
 RUN pip install tensorflow==1.14
 RUN pip install -r requirements.txt
 RUN apt-get update
-RUN apt-get install redis-server=2:2.8.12-1chl1~precise1
-RUN redis-server --daemonize yes
+RUN apt-get install redis-server
+RUN service redis-server start
 RUN python test.py
 
 # Run the web service on container startup. Here we use the gunicorn
