@@ -1,6 +1,6 @@
 # Use the official lightweight Python image.
 # https://hub.docker.com/_/python
-FROM python:3.6
+FROM python:3.6.8-alpine3.9
 
 # Copy local code to the container image.
 ENV APP_HOME /app
@@ -33,4 +33,4 @@ EXPOSE 8080
 
 # run supervisord
 CMD ["supervisord", "-c", "supervisord.conf"]
-#CMD ["gunicorn", "--bind", "0.0.0.0:8080",  "--workers", "1", "--threads", "8", "app:app", "--timeout", "900"]
+#CMD ["gunicorn", "--bind", "0.0.0.0:8080",  "--workers", "1", "--threads", "1", "app:app", "--timeout", "900"]
