@@ -894,7 +894,7 @@ def predict(context, question):
 
 
 
-    tf.gfile.MakeDirs(FLAGS.output_dir)
+    #tf.gfile.MakeDirs(FLAGS.output_dir)
 
     tokenizer = tokenization.FullTokenizer(
       vocab_file='model/vocab.txt', do_lower_case=FLAGS.do_lower_case)
