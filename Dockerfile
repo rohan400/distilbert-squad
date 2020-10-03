@@ -16,6 +16,11 @@ RUN pip uninstall -y tensorflow
 RUN pip install tensorflow==1.14
 RUN pip install -r requirements.txt
 RUN apt-get update
+#RUN apt-get -y install redis-server
+#RUN service redis-server start
+#RUN apt-get install -y supervisor
+#RUN python test.py
+
 
 EXPOSE 8080
 
