@@ -90,7 +90,7 @@ flags.DEFINE_bool("do_predict", False, "Whether to run eval on the dev set.")
 
 flags.DEFINE_integer("train_batch_size", 32, "Total batch size for training.")
 
-flags.DEFINE_integer("predict_batch_size", 1,
+flags.DEFINE_integer("predict_batch_size", 32,
                         "Total batch size for predictions.")
 
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
@@ -106,7 +106,7 @@ flags.DEFINE_float(
 flags.DEFINE_integer("save_checkpoints_steps", 1000,
                         "How often to save the model checkpoint.")
 
-flags.DEFINE_integer("iterations_per_loop", 1,
+flags.DEFINE_integer("iterations_per_loop", 1000,
                         "How many steps to make in each estimator call.")
 
 flags.DEFINE_integer(
