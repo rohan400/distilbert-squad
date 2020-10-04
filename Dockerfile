@@ -19,7 +19,7 @@ RUN apt-get update
 #RUN apt-get -y install redis-server
 #RUN service redis-server start
 #RUN apt-get install -y supervisor
-#RUN python test.py
+RUN python test.py
 
 
 EXPOSE 8080
