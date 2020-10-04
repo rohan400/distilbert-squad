@@ -60,7 +60,7 @@ def processRequest(req):
         response = Response(rs.predict(context, question))
         @response.call_on_close
         def on_close():
-            for i in range(10):
+            for i in range(5):
                 sleep(1)
                 print(i)
     fulfillmentText = "The Iris type seems to be..  {} !".format(response)
