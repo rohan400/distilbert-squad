@@ -35,6 +35,10 @@ FLAGS = flags.FLAGS
 
 
     ## Required parameters
+flags.DEFINE_integer('workers', 1, 'workers')
+flags.DEFINE_string('bind', '', 'Server address')
+flags.DEFINE_integer('timeout', 900, 'Server timeout')
+flags.DEFINE_integer('threads', 8, 'threads')
 flags.DEFINE_string(
         "bert_config_file", None,
         "The config json file corresponding to the pre-trained BERT model. "
