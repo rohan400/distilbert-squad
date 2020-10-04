@@ -34,10 +34,6 @@ flags = tf.flags
 FLAGS = flags.FLAGS
 
 
-flags.DEFINE_integer('workers', 1, 'workers')
-flags.DEFINE_integer('threads', 8, 'threads')
-flags.DEFINE_string('bind', '', 'Server address')
-flags.DEFINE_integer('timeout', 900, 'Server timeout')
     ## Required parameters
 flags.DEFINE_string(
         "bert_config_file", None,
@@ -64,7 +60,7 @@ flags.DEFINE_string(
         "Initial checkpoint (usually from a pre-trained BERT model).")
 
 flags.DEFINE_bool(
-        "do_lower_case", True,
+        "do_lower_case", False,
         "Whether to lower case the input text. Should be True for uncased "
         "models and False for cased models.")
 
@@ -90,12 +86,12 @@ flags.DEFINE_bool("do_predict", False, "Whether to run eval on the dev set.")
 
 flags.DEFINE_integer("train_batch_size", 32, "Total batch size for training.")
 
-flags.DEFINE_integer("predict_batch_size", 8,
+flags.DEFINE_integer("predict_batch_size", 1,
                         "Total batch size for predictions.")
 
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
 
-flags.DEFINE_float("num_train_epochs", 3.0,
+flags.DEFINE_float("num_train_epochs", 1.0,
                     "Total number of training epochs to perform.")
 
 flags.DEFINE_float(
@@ -106,11 +102,11 @@ flags.DEFINE_float(
 flags.DEFINE_integer("save_checkpoints_steps", 1000,
                         "How often to save the model checkpoint.")
 
-flags.DEFINE_integer("iterations_per_loop", 1000,
+flags.DEFINE_integer("iterations_per_loop", 1,
                         "How many steps to make in each estimator call.")
 
 flags.DEFINE_integer(
-        "n_best_size", 20,
+        "n_best_size", 1,
         "The total number of n-best predictions to generate in the "
         "nbest_predictions.json output file.")
 
@@ -393,29 +389,29 @@ def convert_examples_to_features(examples, tokenizer, max_seq_length,
         end_position = 0
 
       if example_index < 20:
-        tf.logging.info("*** Example ***")
-        tf.logging.info("unique_id: %s" % (unique_id))
-        tf.logging.info("example_index: %s" % (example_index))
-        tf.logging.info("doc_span_index: %s" % (doc_span_index))
-        tf.logging.info("tokens: %s" % " ".join(
+        tf.compat.v1.logging.info("*** Example ***")
+        tf.compat.v1.logging.info("unique_id: %s" % (unique_id))
+        tf.compat.v1.logging.info("example_index: %s" % (example_index))
+        tf.compat.v1.logging.info("doc_span_index: %s" % (doc_span_index))
+        tf.compat.v1.logging.info("tokens: %s" % " ".join(
             [tokenization.printable_text(x) for x in tokens]))
-        tf.logging.info("token_to_orig_map: %s" % " ".join(
+        tf.compat.v1.logging.info("token_to_orig_map: %s" % " ".join(
             ["%d:%d" % (x, y) for (x, y) in six.iteritems(token_to_orig_map)]))
-        tf.logging.info("token_is_max_context: %s" % " ".join([
+        tf.compat.v1.logging.info("token_is_max_context: %s" % " ".join([
             "%d:%s" % (x, y) for (x, y) in six.iteritems(token_is_max_context)
         ]))
-        tf.logging.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
-        tf.logging.info(
+        tf.compat.v1.logging.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
+        tf.compat.v1.logging.info(
             "input_mask: %s" % " ".join([str(x) for x in input_mask]))
-        tf.logging.info(
+        tf.compat.v1.logging.info(
             "segment_ids: %s" % " ".join([str(x) for x in segment_ids]))
         if is_training and example.is_impossible:
-          tf.logging.info("impossible example")
+          tf.compat.v1.logging.info("impossible example")
         if is_training and not example.is_impossible:
           answer_text = " ".join(tokens[start_position:(end_position + 1)])
-          tf.logging.info("start_position: %d" % (start_position))
-          tf.logging.info("end_position: %d" % (end_position))
-          tf.logging.info(
+          tf.compat.v1.logging.info("start_position: %d" % (start_position))
+          tf.compat.v1.logging.info("end_position: %d" % (end_position))
+          tf.compat.v1.logging.info(
               "answer: %s" % (tokenization.printable_text(answer_text)))
 
       feature = InputFeatures(
@@ -522,14 +518,14 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
       input_mask=input_mask,
       token_type_ids=segment_ids,
       use_one_hot_embeddings=use_one_hot_embeddings)
-
+  print('**************************************************')
   final_hidden = model.get_sequence_output()
-
+  
   final_hidden_shape = modeling.get_shape_list(final_hidden, expected_rank=3)
   batch_size = final_hidden_shape[0]
   seq_length = final_hidden_shape[1]
   hidden_size = final_hidden_shape[2]
-
+  
   output_weights = tf.get_variable(
       "cls/squad/output_weights", [2, hidden_size],
       initializer=tf.truncated_normal_initializer(stddev=0.02))
@@ -560,9 +556,9 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
   def model_fn(features, labels, mode, params):  # pylint: disable=unused-argument
     """The `model_fn` for TPUEstimator."""
 
-    tf.logging.info("*** Features ***")
+    tf.compat.v1.logging.info("*** Features ***")
     for name in sorted(features.keys()):
-      tf.logging.info("  name = %s, shape = %s" % (name, features[name].shape))
+      tf.compat.v1.logging.info("  name = %s, shape = %s" % (name, features[name].shape))
 
     unique_ids = features["unique_ids"]
     input_ids = features["input_ids"]
@@ -570,7 +566,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
     segment_ids = features["segment_ids"]
 
     is_training = (mode == tf.estimator.ModeKeys.TRAIN)
-
+    
     (start_logits, end_logits) = create_model(
         bert_config=bert_config,
         is_training=is_training,
@@ -578,8 +574,9 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
         input_mask=input_mask,
         segment_ids=segment_ids,
         use_one_hot_embeddings=use_one_hot_embeddings)
-
+    
     tvars = tf.trainable_variables()
+    
 
     initialized_variable_names = {}
     scaffold_fn = None
@@ -589,19 +586,19 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
       if use_tpu:
 
         def tpu_scaffold():
-          tf.train.init_from_checkpoint(init_checkpoint, assignment_map)
+          tf.compat.v1.train.init_from_checkpoint(init_checkpoint, assignment_map)
           return tf.train.Scaffold()
 
         scaffold_fn = tpu_scaffold
       else:
-        tf.train.init_from_checkpoint(init_checkpoint, assignment_map)
+        tf.compat.v1.train.init_from_checkpoint(init_checkpoint, assignment_map)
 
-    tf.logging.info("**** Trainable Variables ****")
+    tf.compat.v1.logging.info("**** Trainable Variables ****")
     for var in tvars:
       init_string = ""
       if var.name in initialized_variable_names:
         init_string = ", *INIT_FROM_CKPT*"
-      tf.logging.info("  name = %s, shape = %s%s", var.name, var.shape,
+      tf.compat.v1.logging.info("  name = %s, shape = %s%s", var.name, var.shape,
                       init_string)
 
     output_spec = None
@@ -707,7 +704,7 @@ def get_final_text(pred_text, orig_text, do_lower_case):
   start_position = tok_text.find(pred_text)
   if start_position == -1:
     if FLAGS.verbose_logging:
-      tf.logging.info(
+      tf.compat.v1.logging.info(
           "Unable to find text: '%s' in '%s'" % (pred_text, orig_text))
     return orig_text
   end_position = start_position + len(pred_text) - 1
@@ -717,7 +714,7 @@ def get_final_text(pred_text, orig_text, do_lower_case):
 
   if len(orig_ns_text) != len(tok_ns_text):
     if FLAGS.verbose_logging:
-      tf.logging.info("Length not equal after stripping spaces: '%s' vs '%s'",
+      tf.compat.v1.logging.info("Length not equal after stripping spaces: '%s' vs '%s'",
                       orig_ns_text, tok_ns_text)
     return orig_text
 
@@ -735,7 +732,7 @@ def get_final_text(pred_text, orig_text, do_lower_case):
 
   if orig_start_position is None:
     if FLAGS.verbose_logging:
-      tf.logging.info("Couldn't map start position")
+      tf.compat.v1.logging.info("Couldn't map start position")
     return orig_text
 
   orig_end_position = None
@@ -746,7 +743,7 @@ def get_final_text(pred_text, orig_text, do_lower_case):
 
   if orig_end_position is None:
     if FLAGS.verbose_logging:
-      tf.logging.info("Couldn't map end position")
+      tf.compat.v1.logging.info("Couldn't map end position")
     return orig_text
 
   output_text = orig_text[orig_start_position:(orig_end_position + 1)]
@@ -876,7 +873,7 @@ def download_model(s3_url, model_name):
 
 def load_model():
 
-    s3_model_url = 'https://storage.googleapis.com/bertpepper/multi_cased_L-12_H-768_A-12/bert_model.ckpt.data-00000-of-00001'
+    s3_model_url = 'https://storage.googleapis.com/bertpepper/romqa/bert_model.ckpt.data-00000-of-00001'
 
     path_to_model1 = download_model(s3_model_url, model_name="bert_model.ckpt.data-00000-of-00001")
 
@@ -892,7 +889,7 @@ def predict(context, question):
 
     path_to_model=load_model()
 
-    tf.logging.set_verbosity(tf.logging.INFO)
+    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.INFO)
 
     bert_config = modeling.BertConfig.from_json_file('model/config.json')
 
@@ -938,11 +935,11 @@ def predict(context, question):
       model_fn=model_fn,
       config=run_config,
       train_batch_size=FLAGS.train_batch_size,
-      predict_batch_size=64)
+      predict_batch_size=1)
 
         
-    context = context.lower()
-    question = question.lower()
+    #context = context.lower()
+    #question = question.lower()
 
     eval_examples = read_squad_examples(context, question)
     eval_writer = FeatureWriter(
@@ -964,26 +961,30 @@ def predict(context, question):
         output_fn=append_feature)
     eval_writer.close()
 
-    tf.logging.info("***** Running predictions *****")
-    tf.logging.info("  Num orig examples = %d", len(eval_examples))
-    tf.logging.info("  Num split examples = %d", len(eval_features))
-    tf.logging.info("  Batch size = %d", FLAGS.predict_batch_size)
+    tf.compat.v1.logging.info("***** Running predictions *****")
+    tf.compat.v1.logging.info("  Num orig examples = %d", len(eval_examples))
+    tf.compat.v1.logging.info("  Num split examples = %d", len(eval_features))
+    tf.compat.v1.logging.info("  Batch size = %d", FLAGS.predict_batch_size)
 
     all_results = []
+    
+
 
     predict_input_fn = input_fn_builder(
         input_file=eval_writer.filename,
         seq_length=FLAGS.max_seq_length,
         is_training=False,
         drop_remainder=False)
+    
 
     # If running eval on the TPU, you will need to specify the number of
     # steps.
     all_results = []
     for result in estimator.predict(
         predict_input_fn, yield_single_examples=True):
+      
       if len(all_results) % 1000 == 0:
-        tf.logging.info("Processing example: %d" % (len(all_results)))
+        tf.compat.v1.logging.info("Processing example: %d" % (len(all_results)))
       unique_id = int(result["unique_ids"])
       start_logits = [float(x) for x in result["start_logits"].flat]
       end_logits = [float(x) for x in result["end_logits"].flat]
@@ -992,6 +993,7 @@ def predict(context, question):
               unique_id=unique_id,
               start_logits=start_logits,
               end_logits=end_logits))
+      
 
 
     answerQA = write_predictions(eval_examples, eval_features, all_results,
