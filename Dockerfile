@@ -4,7 +4,7 @@ FROM python:3.6.8
 
 # Copy local code to the container image.
 ENV APP_HOME /app
-ENV APP_HOME /app/models
+ENV APP_HOME /app/model
 WORKDIR $APP_HOME
 COPY . ./
 
@@ -21,9 +21,9 @@ RUN apt-get update
 #RUN service redis-server start
 #RUN apt-get install -y supervisor
 RUN python test.py
-COPY models/config.json models/config.json
-COPY models/bert_model.ckpt models/bert_model.ckpt
-COPY models/vocab.txt models/vocab.txt
+COPY model/config.json model/config.json
+COPY model/bert_model.ckpt model/bert_model.ckpt
+COPY model/vocab.txt model/vocab.txt
 
 
 EXPOSE 8080
