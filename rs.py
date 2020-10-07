@@ -891,7 +891,7 @@ def load_model():
 
 def predict(context, question):
 
-    path_to_model=load_model()
+    path_to_model='model/bert_model.ckpt'
 
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.INFO)
 
