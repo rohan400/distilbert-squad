@@ -14,8 +14,9 @@ def hello():
     response = Response(rs.predict(context, question))
     @response.call_on_close
     def on_close():
-        for i in range(3):
+        for i in range(10):
             sleep(1)
+            print(i)
 
     return response
 
