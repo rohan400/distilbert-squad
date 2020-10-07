@@ -21,9 +21,7 @@ RUN apt-get update
 #RUN service redis-server start
 #RUN apt-get install -y supervisor
 RUN python test.py
-COPY model/config.json model/config.json
-COPY model/bert_model.ckpt model/bert_model.ckpt
-COPY model/vocab.txt model/vocab.txt
+
 
 
 EXPOSE 8080
