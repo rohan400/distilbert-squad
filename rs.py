@@ -90,7 +90,7 @@ flags.DEFINE_bool("do_predict", False, "Whether to run eval on the dev set.")
 
 flags.DEFINE_integer("train_batch_size", 32, "Total batch size for training.")
 
-flags.DEFINE_integer("predict_batch_size", 32,
+flags.DEFINE_integer("predict_batch_size", 1,
                         "Total batch size for predictions.")
 
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
@@ -106,7 +106,7 @@ flags.DEFINE_float(
 flags.DEFINE_integer("save_checkpoints_steps", 1000,
                         "How often to save the model checkpoint.")
 
-flags.DEFINE_integer("iterations_per_loop", 1000,
+flags.DEFINE_integer("iterations_per_loop", 1,
                         "How many steps to make in each estimator call.")
 
 flags.DEFINE_integer(
@@ -891,7 +891,7 @@ def load_model():
 
 def predict(context, question):
 
-    path_to_model='model/bert_model.ckpt'
+    path_to_model=load_model()
 
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.INFO)
 
@@ -1199,4 +1199,5 @@ def input_fn_builder(input_file, seq_length, is_training, drop_remainder):
     return d
 
   return input_fn
+
 
