@@ -67,7 +67,7 @@ def processRequest(req):
     intent = result.get("intent").get('displayName')
     
     if (intent=='QA - yes'):
-        response = Response(rs.predict(context, question))
+        #response = Response(rs.predict(context, question))
         if now<=extended_time:
             fulfillmentText = 'Typing...'
             time.sleep(3.5)
@@ -92,11 +92,7 @@ def processRequest(req):
     if (intent=='QA - yes - custom - custom'):
         if now<=extended_time:
             time.sleep(3.5)
-            @response.call_on_close
-            def on_close():
-                for i in range(1):
-                    sleep(1)
-                    print(i)
+
     fulfillmentText = "The Iris type seems to be..  {} !".format(response)
     return {
             "fulfillmentText": fulfillmentText
