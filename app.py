@@ -35,8 +35,9 @@ def hello():
     return 'Hello World'
 
 # geting and sending response to dialogflow
-@app.route('/webhook', methods=['POST'])
+'''@app.route('/webhook', methods=['POST'])
 @cross_origin()
+
 def webhook():
 
     req = request.get_json(silent=True, force=True)
@@ -98,8 +99,95 @@ def processRequest(req):
             "fulfillmentText": fulfillmentText
         }
     
-        
+ '''      
+    if intent=='QA - yes ':
 
+        # Added time delay to fail the below 'if condition' of normal response for welcome intent:
+        time.sleep(3.5)
+        
+        # if current time is less than or equal to extended time then only below condition becomes "True":
+        if now<=extended_time:
+            # make a webhook response for welcome intent:
+            reply={ "fulfillmentText": "This is simple welcome response from webhook",
+                    "fulfillmentMessages": [
+                            {
+                            "text": {
+                                    "text": [
+                                        "This is simple welcome response from webhook"
+                                    ]
+                                }
+                            }
+                        ],  
+                }
+
+        # Create a Followup event when above "if condition" fail:
+        reply={
+                "followupEventInput": {
+                        "name": "extent_webhook_deadline",
+                        "languageCode": "en-US"
+                    }
+            }
+
+    # Create a chain of followup event. Enter into first follow up event:
+    # second intent action:
+
+    if (intent=='QA - yes - custom'):
+        print("enter into first followup event")
+
+        # Added time delay to fail the below 'if condition' and extend time by "3.5 sec", means right now total time "7 seconds" after webhook execute:
+        time.sleep(3.5)
+        
+        # if current time is less than or equal to extended time then only below condition becomes "True": 
+        if now<=extended_time:
+            reply={ "fulfillmentText": "Yea, hi there. this is followup 1 event response for webhook.",
+                    "fulfillmentMessages": [
+                            {
+                            "text": {
+                                    "text": [
+                                        "Yea, hi there. this is followup 1 event response for webhook."
+                                    ]
+                                }
+                        }
+                    ],
+                "languageCode": "en",
+            }
+
+        # Create a Followup event number 2 when above "if condition" fail:
+        reply={
+                "followupEventInput": {
+                        "name": "extent_webhook_deadline_2",
+                        "languageCode": "en-US"
+                    }
+            }
+    
+    # Third intent action: 
+    if (intent=='QA - yes - custom - custom'):
+        print("enter into second followup event")
+
+        # Added time delay to fail the below condition and extended more time by "3.5 sec", means right now total time "10.5 seconds" after webhook execute:
+        time.sleep(3.5)
+        
+        # below response should be generated for extended webhook deadline:
+        reply={ "fulfillmentText": "Yea, hi there. this is followup event 2 response for webhook.",
+                    "fulfillmentMessages": [
+                            {
+                            "text": {
+                                    "text": [
+                                        "Yea, hi there. this is followup event 2 response for webhook."
+                                    ]
+                                }
+                            }
+                        ],
+                "languageCode": "en",
+            }
+        
+        print("Final time of execution:=>", now.strftime("%H:%M:%S"))
+    return reply
+@app.route('/webhook/', methods=['GET', 'POST'])
+def webhook():
+
+    # return response
+    return make_response(jsonify(broadbridge_webhook_results()))
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
