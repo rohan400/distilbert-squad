@@ -69,6 +69,7 @@ def processRequest(req):
                         "name": "extent_webhook_deadline",
                         "languageCode": "en-US"
                     }
+                }
             
     if (intent=='QA - yes - custom'):
         if now<=extended_time:
@@ -79,6 +80,7 @@ def processRequest(req):
                         "name": "extent_webhook_deadline2",
                         "languageCode": "en-US"
                     }
+                }
                 
      if (intent=='QA - yes - custom - custom'):
         if now<=extended_time:
