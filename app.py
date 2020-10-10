@@ -100,7 +100,7 @@ def processRequest(req):
         }
     
  '''      
-    req = request.get_json(force=True)
+    req = request.get_json(silent=True, force=True)
 
     intent = result.get("intent").get('displayName')
     reply=''
