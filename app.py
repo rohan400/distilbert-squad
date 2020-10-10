@@ -142,59 +142,8 @@ def broadbridge_webhook_results():
                     }
             }
 
-    # Create a chain of followup event. Enter into first follow up event:
-    # second intent action:
-    if intent=='QA - yes - custom':
-        print("enter into first followup event")
 
-        # Added time delay to fail the below 'if condition' and extend time by "3.5 sec", means right now total time "7 seconds" after webhook execute:
-        time.sleep(3.5)
-        
-        # if current time is less than or equal to extended time then only below condition becomes "True": 
-        if now<=extended_time:
-            reply={ "fulfillmentText": "Yea, hi there. this is followup 1 event response for webhook.",
-                    "fulfillmentMessages": [
-                            {
-                            "text": {
-                                    "text": [
-                                        "Yea, hi there. this is followup 1 event response for webhook."
-                                    ]
-                                }
-                        }
-                    ],
-                "languageCode": "en",
-            }
 
-        # Create a Followup event number 2 when above "if condition" fail:
-        reply={
-                "followupEventInput": {
-                        "name": "extent_webhook_deadline_2",
-                        "languageCode": "en-US"
-                    }
-            }
-    
-    # Third intent action: 
-    if intent=='QA - yes - custom - custom':
-        print("enter into second followup event")
-
-        # Added time delay to fail the below condition and extended more time by "3.5 sec", means right now total time "10.5 seconds" after webhook execute:
-        time.sleep(3.5)
-        
-        # below response should be generated for extended webhook deadline:
-        reply={ "fulfillmentText": "Yea, hi there. this is followup event 2 response for webhook.",
-                    "fulfillmentMessages": [
-                            {
-                            "text": {
-                                    "text": [
-                                        "Yea, hi there. this is followup event 2 response for webhook."
-                                    ]
-                                }
-                            }
-                        ],
-                "languageCode": "en",
-            }
-        
-        print("Final time of execution:=>", now.strftime("%H:%M:%S"))
     return reply
 
 
