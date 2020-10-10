@@ -22,12 +22,7 @@ def hello():
             print(i)
 
     return response'''
-now = datetime.now()
-current_time = now.strftime("%H:%M:%S")
 
-
-# extended time by 3 sec to make condition which is execute before webhook deadline occur:
-extended_time = now + timedelta(seconds=3)
 
 
 @app.route('/')
@@ -100,11 +95,26 @@ def processRequest(req):
         }
     
  '''      
-    req = request.get_json(silent=True, force=True)
+def broadbridge_webhook_results():
+
+    # get current time by using below command:
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print("Current Time =", current_time)
+
+    # extended time by 3 sec to make condition which is execute before webhook deadline occur:
+    extended_time = now + timedelta(seconds=3)
+    print("extended Time =", extended_time.time())
+
+    # Dialogflow agent json response:
+    req = request.get_json(force=True)
 
     intent = result.get("intent").get('displayName')
     reply=''
-    if intent=='QA - yes ':
+    
+    # If "welcome" intent is detected then below condition becomes "True": 
+    # First intent action:
+    if intent=='QA - yes':
 
         # Added time delay to fail the below 'if condition' of normal response for welcome intent:
         time.sleep(3.5)
@@ -134,8 +144,7 @@ def processRequest(req):
 
     # Create a chain of followup event. Enter into first follow up event:
     # second intent action:
-
-    if (intent=='QA - yes - custom'):
+    if intent=='QA - yes - custom':
         print("enter into first followup event")
 
         # Added time delay to fail the below 'if condition' and extend time by "3.5 sec", means right now total time "7 seconds" after webhook execute:
@@ -165,7 +174,7 @@ def processRequest(req):
             }
     
     # Third intent action: 
-    if (intent=='QA - yes - custom - custom'):
+    if action=='QA - yes - custom - custom':
         print("enter into second followup event")
 
         # Added time delay to fail the below condition and extended more time by "3.5 sec", means right now total time "10.5 seconds" after webhook execute:
@@ -187,6 +196,8 @@ def processRequest(req):
         
         print("Final time of execution:=>", now.strftime("%H:%M:%S"))
     return reply
+
+
 @app.route('/webhook/', methods=['GET', 'POST'])
 def webhook():
 
