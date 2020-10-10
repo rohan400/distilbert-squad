@@ -13,6 +13,7 @@ def hello():
     question = "Ce surprinde Macro Cam la Samsung Galaxy A31?"
     response = Response(rs.predict(context, question))
     time.sleep(10)
+    
     @response.call_on_close
     def on_close():
         for i in range(10):
@@ -60,12 +61,33 @@ def processRequest(req):
     
     if (intent=='QA - yes'):
         response = Response(rs.predict(context, question))
-        time.sleep(10)
-        @response.call_on_close
-        def on_close():
-            for i in range(5):
-                sleep(1)
-                print(i)
+        if now<=extended_time:
+            fulfillmentText = 'Typing...'
+            time.sleep(3.5)
+            reply={
+                "followupEventInput": {
+                        "name": "extent_webhook_deadline",
+                        "languageCode": "en-US"
+                    }
+            
+     if (intent=='QA - yes - custom'):
+        if now<=extended_time:
+            fulfillmentText = 'Typing...'
+            time.sleep(3.5)
+            reply={
+                "followupEventInput": {
+                        "name": "extent_webhook_deadline2",
+                        "languageCode": "en-US"
+                    }
+                
+     if (intent=='QA - yes - custom - custom'):
+        if now<=extended_time:
+            time.sleep(3.5)
+            @response.call_on_close
+            def on_close():
+                for i in range(1):
+                    sleep(1)
+                    print(i)
     fulfillmentText = "The Iris type seems to be..  {} !".format(response)
     return {
             "fulfillmentText": fulfillmentText
