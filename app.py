@@ -70,7 +70,7 @@ def processRequest(req):
                         "languageCode": "en-US"
                     }
             
-     if (intent=='QA - yes - custom'):
+    if (intent=='QA - yes - custom'):
         if now<=extended_time:
             fulfillmentText = 'Typing...'
             time.sleep(3.5)
