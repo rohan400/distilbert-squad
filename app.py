@@ -174,7 +174,7 @@ def broadbridge_webhook_results():
             }
     
     # Third intent action: 
-    if action=='QA - yes - custom - custom':
+    if intent=='QA - yes - custom - custom':
         print("enter into second followup event")
 
         # Added time delay to fail the below condition and extended more time by "3.5 sec", means right now total time "10.5 seconds" after webhook execute:
@@ -198,7 +198,7 @@ def broadbridge_webhook_results():
     return reply
 
 
-@app.route('/webhook/', methods=['GET', 'POST'])
+@app.route('/webhook/', methods=['POST'])
 def webhook():
 
     # return response
