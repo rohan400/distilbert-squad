@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 app = flask.Flask(__name__)
 
 @app.route('/')
-def hello():
+def index():
     if request.args:
 
         context = request.args["context"]
@@ -19,7 +19,7 @@ def hello():
         response = Response(rs.predict(context, question))  
         @response.call_on_close
         def on_close():
-            for i in range(5):
+            for i in range(10):
                 sleep(1)
 
 
