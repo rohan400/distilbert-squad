@@ -3,7 +3,7 @@ from flask import Flask, request, make_response, Response
 from flask_cors import cross_origin
 import rs
 import os
-from time import sleep
+import time
 from datetime import datetime, timedelta
 app = Flask(__name__)
 
