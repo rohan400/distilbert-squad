@@ -8,26 +8,30 @@ import json
 from datetime import datetime, timedelta
 app = Flask(__name__)
 
-'''@app.route('/')
-def hello():
-    context = "Telefon mobil Samsung Galaxy A31, Dual SIM, 64GB, 4G, Prism Crush Black  Macro Cam surprinde detaliile din apropiere Camera foto macro de 5MP (40 mm) realizeaza fotografii cu claritate si calitate ridicata, ceea ce te ajuta sa scoti in evidenta detaliile foarte fine ale fotografiilor tale, din apropiere. Aplica si ajusteaza estomparea naturala a fundalului (Bokeh) pentru a izola subiectul si a-i creste impactul vizual. Depth Camera iti aduce subiectul in centrul atentiei"
-    question = "Ce surprinde Macro Cam la Samsung Galaxy A31?"
-    response = Response(rs.predict(context, question))
-    time.sleep(10)
-    
-    @response.call_on_close
-    def on_close():
-        for i in range(10):
-            sleep(1)
-            print(i)
-
-    return response'''
-
-
-
 @app.route('/')
 def hello():
-    return 'Hello World'
+    if request.args:
+
+        context = request.args["context"]
+        question = request.args["question"]
+
+        response = Response(rs.predict(context, question))  
+        @response.call_on_close
+        def on_close():
+            for i in range(5):
+                sleep(1)
+
+
+        return flask.render_template('index.html', question=question, answer=response)
+    else:
+        return flask.render_template('index.html')
+        
+
+
+    return response
+
+
+
 
 # geting and sending response to dialogflow
 '''@app.route('/webhook', methods=['POST'])
@@ -51,6 +55,14 @@ def webhook():
 
 # processing the request from dialogflow
 def processRequest(req):
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print("Current Time =", current_time)
+
+    # extended time by 3 sec to make condition which is execute before webhook deadline occur:
+    extended_time = now + timedelta(seconds=3)
+    print("extended Time =", extended_time.time())
+
 
     #sessionID=req.get('responseId')
     result = req.get("queryResult")
@@ -63,98 +75,21 @@ def processRequest(req):
     intent = result.get("intent").get('displayName')
     
     if (intent=='QA - yes'):
-        #response = Response(rs.predict(context, question))
-        if now<=extended_time:
-            fulfillmentText = 'Typing...'
-            time.sleep(3.5)
-        reply={
-                "followupEventInput": {
-                        "name": "extent_webhook_deadline",
-                        "languageCode": "en-US"
-                    }
-            }
-
-    if (intent=='QA - yes - custom'):
-        if now<=extended_time:
-            fulfillmentText = 'Typing...'
-            time.sleep(3.5)
-        reply={
-                "followupEventInput": {
-                        "name": "extent_webhook_deadline2",
-                        "languageCode": "en-US"
-                    }
-            }
-                
-    if (intent=='QA - yes - custom - custom'):
-        if now<=extended_time:
-            time.sleep(3.5)
-
+        response = Response(rs.predict(context, question))
+        @response.call_on_close
+        def on_close():
+            for i in range(1):
+                sleep(5)
     fulfillmentText = "The Iris type seems to be..  {} !".format(response)
     return {
             "fulfillmentText": fulfillmentText
-        }
+        }'''
     
- '''      
-def broadbridge_webhook_results():
-
-    # get current time by using below command:
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print("Current Time =", current_time)
-
-    # extended time by 3 sec to make condition which is execute before webhook deadline occur:
-    extended_time = now + timedelta(seconds=3)
-    print("extended Time =", extended_time.time())
-
-    # Dialogflow agent json response:
-    req = request.get_json(force=True)
-
-    intent = result.get("intent").get('displayName')
-    reply=''
-    
-    # If "welcome" intent is detected then below condition becomes "True": 
-    # First intent action:
-    if intent=='QA - yes':
-
-        # Added time delay to fail the below 'if condition' of normal response for welcome intent:
-        time.sleep(3.5)
-        
-        # if current time is less than or equal to extended time then only below condition becomes "True":
-        if now<=extended_time:
-            # make a webhook response for welcome intent:
-            reply={ "fulfillmentText": "This is simple welcome response from webhook",
-                    "fulfillmentMessages": [
-                            {
-                            "text": {
-                                    "text": [
-                                        "This is simple welcome response from webhook"
-                                    ]
-                                }
-                            }
-                        ],  
-                }
-
-        # Create a Followup event when above "if condition" fail:
-        reply={
-                "followupEventInput": {
-                        "name": "extent_webhook_deadline",
-                        "languageCode": "en-US"
-                    }
-            }
-
-
-
-    return reply
-
-
-@app.route('/webhook/', methods=['POST'])
-def webhook():
-
-    # return response
-    return make_response(jsonify(broadbridge_webhook_results()))
+ 
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+
 
 
 
