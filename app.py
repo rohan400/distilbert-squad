@@ -71,23 +71,23 @@ def processRequest(req):
         if now<=extended_time:
             fulfillmentText = 'Typing...'
             time.sleep(3.5)
-            reply={
+        reply={
                 "followupEventInput": {
                         "name": "extent_webhook_deadline",
                         "languageCode": "en-US"
                     }
-                }
-            
+            }
+
     if (intent=='QA - yes - custom'):
         if now<=extended_time:
             fulfillmentText = 'Typing...'
             time.sleep(3.5)
-            reply={
+        reply={
                 "followupEventInput": {
                         "name": "extent_webhook_deadline2",
                         "languageCode": "en-US"
                     }
-                }
+            }
                 
     if (intent=='QA - yes - custom - custom'):
         if now<=extended_time:
