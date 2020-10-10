@@ -100,6 +100,10 @@ def processRequest(req):
         }
     
  '''      
+    req = request.get_json(force=True)
+
+    intent = result.get("intent").get('displayName')
+    reply=''
     if intent=='QA - yes ':
 
         # Added time delay to fail the below 'if condition' of normal response for welcome intent:
