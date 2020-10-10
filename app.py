@@ -21,6 +21,12 @@ def hello():
             print(i)
 
     return response'''
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
+
+
+# extended time by 3 sec to make condition which is execute before webhook deadline occur:
+extended_time = now + timedelta(seconds=3)
 
 
 @app.route('/')
