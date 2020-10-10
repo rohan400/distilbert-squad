@@ -82,7 +82,7 @@ def processRequest(req):
                     }
                 }
                 
-     if (intent=='QA - yes - custom - custom'):
+    if (intent=='QA - yes - custom - custom'):
         if now<=extended_time:
             time.sleep(3.5)
             @response.call_on_close
