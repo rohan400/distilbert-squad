@@ -20,7 +20,7 @@ RUN pip install -r requirements.txt
 #RUN apt-get -y install redis-server
 #RUN service redis-server start
 #RUN apt-get install -y supervisor
-RUN python test.py
+RUN python modelNew.py
 
 
 
