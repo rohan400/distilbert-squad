@@ -20,7 +20,7 @@ class Model:
         print('******************************************')
         path_to_model = download_model(s3_model_url, model_name="pytorch_model.bin")
 
-        qa_pipeline = pipeline("question-answering",model=path_to_model,tokenizer=path_to_model)
+        qa_pipeline = pipeline("question-answering",model=path,tokenizer=path)
 
         return qa_pipeline
 
