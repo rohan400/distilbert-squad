@@ -17,9 +17,10 @@ class Model:
     def model_load(self, path):
 
         s3_model_url = 'https://storage.googleapis.com/bertpepper/pepperqa/pytorch_model.bin'
+        print('******************************************')
         path_to_model = download_model(s3_model_url, model_name="pytorch_model.bin")
 
-        qa_pipeline = pipeline("question-answering",model="model",tokenizer="model")
+        qa_pipeline = pipeline("question-answering",model=path_to_model,tokenizer=path_to_model)
 
         return qa_pipeline
 
