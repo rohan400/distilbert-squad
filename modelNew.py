@@ -11,7 +11,8 @@ from download import download_model
 class Model:
 
     def __init__(self, path: str):
-        self.model = self.model_load(path)
+        #self.model = self.model_load(path)
+        print('******************************************')
 
 
     def model_load(self, path):
