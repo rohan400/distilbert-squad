@@ -8,6 +8,12 @@ import json
 import flask
 from datetime import datetime, timedelta
 app = flask.Flask(__name__)
+from transformers import pipeline
+qa_pipeline = pipeline(
+    "question-answering",
+    model="models",
+    tokenizer="models"
+)
 
 @app.route('/')
 def index():
@@ -15,15 +21,12 @@ def index():
 
         context = request.args["context"]
         question = request.args["question"]
-
-        response = Response(rs.predict(context, question))  
-        @response.call_on_close
-        def on_close():
-            for i in range(10):
-                sleep(1)
+        answer =qa_pipeline({'context': context,'question': question})
+        
 
 
-        return flask.render_template('index.html', question=question, answer=response)
+
+        return flask.render_template('index.html', question=question, answer=answer['answer])
     else:
         return flask.render_template('index.html')
         
