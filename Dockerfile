@@ -15,7 +15,7 @@ COPY . ./
 COPY requirements.txt .
 
 RUN pip install -r requirements.txt
-RUN pip install torch
+
 
 #RUN apt-get -y install redis-server
 #RUN service redis-server start
