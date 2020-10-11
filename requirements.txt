@@ -1,10 +1,8 @@
 transformers
 tensorflow
-docutils==0.15.2
 filelock==3.0.12
 Flask==1.0.2
 requests==2.18.4
 dialogflow==0.4.0
-python-dotenv==0.8.2
 Flask-Cors==3.0.8
 
