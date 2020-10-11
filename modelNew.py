@@ -25,7 +25,7 @@ class Model:
         return qa_pipeline
 
     def predict(self, context, question):
-        answer =qa_pipeline({'context': context,'question': question})
+        answer =self.model({'context': context,'question': question})
 
 
         return answer
