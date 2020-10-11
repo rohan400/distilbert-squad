@@ -1,5 +1,5 @@
 import numpy as np
-import modelNew
+from modelNew import model
 import os
 import time
 import json
@@ -14,7 +14,7 @@ def index():
 
         context = request.args["context"]
         question = request.args["question"]
-        answer =modelNew.predict(context, question)
+        answer =model.predict(context, question)
         return flask.render_template('index.html', question=question, answer=answer['answer'])
     else:
         return flask.render_template('index.html')
