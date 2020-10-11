@@ -21,8 +21,7 @@ def load_model():
 
     path_to_model = download_model(s3_model_url, model_name="pytorch_model.bin")
 
-    
-
+   
     return path_to_model
     
     
