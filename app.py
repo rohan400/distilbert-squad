@@ -1,12 +1,9 @@
 import numpy as np
-from flask import request, make_response, Response
-from flask_cors import cross_origin
 import modelNew
 import os
 import time
 import json
 import flask
-from datetime import datetime, timedelta
 app = flask.Flask(__name__)
 
 
