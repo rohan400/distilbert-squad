@@ -17,7 +17,8 @@ RUN pip uninstall -y tensorflow
 RUN pip install tensorflow
 RUN pip install -r requirements.txt
 RUN pip install torch
-RUN apt-get update
+RUN pip install torch
+RUN pip3 install http://download.pytorch.org/whl/cu91/torch-0.4.0-cp35-cp35m-linux_x86_64.whl
 #RUN apt-get -y install redis-server
 #RUN service redis-server start
 #RUN apt-get install -y supervisor
