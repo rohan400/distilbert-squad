@@ -1,6 +1,7 @@
 from pathlib import Path
 import requests
 import os
+from transformers import pipeline
 
 def download_model(s3_url, model_name):
     path = "./model"
@@ -20,9 +21,11 @@ def load_model():
     s3_model_url = 'https://storage.googleapis.com/bertpepper/pepperqa/pytorch_model.bin'
 
     path_to_model = download_model(s3_model_url, model_name="pytorch_model.bin")
+    qa_pipeline = pipeline("question-answering",model="model",tokenizer="model")
 
    
-    return path_to_model
+    return qa_pipeline
+    
     
     
     
