@@ -21,9 +21,9 @@ class Model:
         print('******************************************')
         path_to_model = download_model(s3_model_url, model_name="pytorch_model.bin")
 
-        #qa_pipeline = pipeline("question-answering",model=path,tokenizer=path)
+        qa_pipeline = pipeline("question-answering",model=path,tokenizer=path)
 
-        return path_to_model
+        return qa_pipeline
 
     def predict(self, context, question):
         answer =self.model({'context': context,'question': question})
