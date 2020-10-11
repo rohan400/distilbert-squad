@@ -49,15 +49,6 @@ def webhook():
 
 # processing the request from dialogflow
 def processRequest(req):
-    now = datetime.now()
-    current_time = now.strftime("%H:%M:%S")
-    print("Current Time =", current_time)
-
-    # extended time by 3 sec to make condition which is execute before webhook deadline occur:
-    extended_time = now + timedelta(seconds=3)
-    print("extended Time =", extended_time.time())
-
-
     #sessionID=req.get('responseId')
     result = req.get("queryResult")
     #user_says=result.get("queryText")
