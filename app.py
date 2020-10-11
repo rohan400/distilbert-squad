@@ -3,8 +3,9 @@ from modelNew import model
 import os
 import time
 import json
-from flask import request
+from flask import request, make_response
 import flask
+from flask_cors import cross_origin
 app = flask.Flask(__name__)
 
 
