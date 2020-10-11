@@ -1,12 +1,5 @@
 transformers
 tensorflow==1.14
-filelock==3.0.12
-Flask==1.0.2
-requests==2.18.4
-dialogflow==0.4.0
-Flask-Cors==3.0.8
-Werkzeug==1.0.0
-gunicorn
 boto3==1.12.27
 botocore==1.15.27
 certifi==2019.11.28
