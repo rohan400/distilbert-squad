@@ -4,7 +4,7 @@ import os
 
 
 def download_model(s3_url, model_name):
-    path = "./model"
+    path = "model"
     path_to_model = os.path.join(path, model_name)
     if not os.path.exists(path_to_model):
         print("Model weights not found, downloading from S3...")
