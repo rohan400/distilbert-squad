@@ -22,7 +22,7 @@ def index():
         context = request.args["context"]
         question = request.args["question"]
         answer =qa_pipeline({'context': context,'question': question})
-        return flask.render_template('index.html', question=question, answer=answer['answer])
+        return flask.render_template('index.html', question=question, answer=answer['answer'])
     else:
         return flask.render_template('index.html')
         
