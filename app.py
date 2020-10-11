@@ -8,7 +8,7 @@ import flask
 app = flask.Flask(__name__)
 
 
-@app.route('/')
+'''@app.route('/')
 def index():
     if request.args:
 
@@ -21,13 +21,13 @@ def index():
         
 
 
-    return response
+    return response'''
 
 
 
 
 # geting and sending response to dialogflow
-'''@app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['POST'])
 @cross_origin()
 
 def webhook():
@@ -68,15 +68,11 @@ def processRequest(req):
     intent = result.get("intent").get('displayName')
     
     if (intent=='QA - yes'):
-        response = Response(rs.predict(context, question))
-        @response.call_on_close
-        def on_close():
-            for i in range(1):
-                sleep(5)
-    fulfillmentText = "The Iris type seems to be..  {} !".format(response)
+        answer =model.predict(context, question)
+    fulfillmentText = "The Iris type seems to be..  {} !".format(answer['answer'])
     return {
             "fulfillmentText": fulfillmentText
-        }'''
+        }
     
  
 
