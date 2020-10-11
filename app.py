@@ -1,19 +1,14 @@
 import numpy as np
 from flask import request, make_response, Response
 from flask_cors import cross_origin
-import rs
+import modelNew
 import os
 import time
 import json
 import flask
 from datetime import datetime, timedelta
 app = flask.Flask(__name__)
-from transformers import pipeline
-qa_pipeline = pipeline(
-    "question-answering",
-    model="models",
-    tokenizer="models"
-)
+
 
 @app.route('/')
 def index():
@@ -21,7 +16,7 @@ def index():
 
         context = request.args["context"]
         question = request.args["question"]
-        answer =qa_pipeline({'context': context,'question': question})
+        answer =modelNew.predict(context, question)
         return flask.render_template('index.html', question=question, answer=answer['answer'])
     else:
         return flask.render_template('index.html')
