@@ -1,5 +1,5 @@
 transformers
-tensorflow==1.14
+tensorflow
 boto3==1.12.27
 botocore==1.15.27
 certifi==2019.11.28
