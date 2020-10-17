@@ -9,7 +9,7 @@ from flask_cors import cross_origin
 app = flask.Flask(__name__)
 
 
-@app.route('/')
+'''@app.route('/')
 def index():
     if request.args:
 
@@ -22,11 +22,11 @@ def index():
         
 
 
-    return response
+    return response'''
 
 
 # geting and sending response to dialogflow
-'''@app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['POST'])
 @cross_origin()
 
 def webhook():
@@ -62,7 +62,7 @@ def processRequest(req):
     fulfillmentText = "The Iris type seems to be..  {} !".format(answer['answer'])
     return {
             "fulfillmentText": fulfillmentText
-        }'''
+        }
     
  
 
