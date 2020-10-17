@@ -25,8 +25,6 @@ def index():
     return response'''
 
 
-
-
 # geting and sending response to dialogflow
 @app.route('/webhook', methods=['POST'])
 @cross_origin()
