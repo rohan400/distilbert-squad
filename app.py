@@ -59,7 +59,7 @@ def processRequest(req):
     
     if (intent=='QA - yes'):
         answer =model.predict(context, question)
-    fulfillmentText = "The Iris type seems to be..  {} !".format(answer['answer'])
+    fulfillmentText = "{} !".format(answer['answer'])
     return {
             "fulfillmentText": fulfillmentText
         }
