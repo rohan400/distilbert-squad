@@ -9,7 +9,7 @@ from flask_cors import cross_origin
 app = flask.Flask(__name__)
 
 
-'''@app.route('/')
+@app.route('/')
 def index():
     if request.args:
 
@@ -22,7 +22,7 @@ def index():
         
 
 
-    return response'''
+    return response
 
 
 # geting and sending response to dialogflow
